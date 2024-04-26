@@ -22,19 +22,19 @@ public class MessageApplicationSpring {
         AnnotationConfigApplicationContext context=new AnnotationConfigApplicationContext(AppConfiguration.class);
 
         //mesajimizi SmsService ile gonderelim.
-//        MessageService service=context.getBean(SmsService.class);//newlemedim, rica ettik
-//        service.sendMessage(message);
+        MessageService service=context.getBean(SmsService.class);//newlemedim, rica ettik
+        service.sendMessage(message);
 
-//        MessageService service2=context.getBean(SmsService.class);
-//        service2.sendMessage(message);
+        MessageService service2=context.getBean(SmsService.class);
+        service2.sendMessage(message);
 
         //mesajimizi SmsService ile gonderelim.
       //  MessageService service3=context.getBean(SlackService.class);
-//        MessageService service3=context.getBean("slack_service",MessageService.class);
-//        service3.sendMessage(message);
-//        //getBean metoduna parametre olarak parentı verirsek ve birden fazla childı varsa
-//        //beanin ismini de belirtmeliyiz.
-//        service3.saveMessage(message);
+        MessageService service3=context.getBean("slack_service",MessageService.class);
+        service3.sendMessage(message);
+        //getBean metoduna parametre olarak parentı verirsek ve birden fazla childı varsa
+        //beanin ismini de belirtmeliyiz.
+        service3.saveMessage(message);
 
 
         //bagimlilik varsa ne olur?
@@ -88,6 +88,14 @@ public class MessageApplicationSpring {
             System.out.println(service7);
         }
 
+        System.out.println("----------------------------------------------------------");
+        SlackService service8=context.getBean(SlackService.class);
+        service8.printContact();
+
+
+        System.out.println("---------------------Properties ile--------------------------------------");
+        service8.getContact();
+        System.out.println("--------------------------------------------------------------");
 
 
 

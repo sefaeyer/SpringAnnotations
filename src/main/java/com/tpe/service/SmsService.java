@@ -7,42 +7,57 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-@Component//bu class in objeleri spring container tarafindan olusturulur ve yonetilir. bu objelere Spring Bean adi verilir.
-@Scope("protoype")
-public class SmsService implements MessageService {
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
-    //  --> field injection yontemi
-//    @Autowired//bagimliligin enjekte edilmesini saglar
-//    @Qualifier("fileRepository")//birden fazla ayni data tipinde
-//                                //bean varsa belirleyici gorevini gorur.
+@Component//bu classın objeleri Spring tarafından oluşturulur ve yönetilir ve bu objelere Spring Bean adı verilir.
+@Scope("prototype")
+public class SmsService implements MessageService{
+
+    @PostConstruct
+    public void postConstruct(){
+        System.out.println("----> SmsService objesi üretildi.");
+    }
+
+    @PreDestroy
+    public void preDestroy(){
+        System.out.println("<---- SmsService objesi imha edildi.");
+    }
+
+    //field injection
+//    @Autowired//bağımlılığın enjekte edilmesini sağlar
+//    @Qualifier("fileRepository")//birden fazla aynı data tipinde bean varsa belirleyici görevini görür.
 //    private Repository repo;
 
-    //==================================================================================================
+    //------------------------------------------------------------------------------------
 
-    //  --> setter injection yontemi
+    //setter  injection
     private Repository repo;
+
     @Autowired
     @Qualifier("fileRepository")
     public void setRepo(Repository repo) {
         this.repo = repo;
     }
 
-    //==================================================================================================
+    //------------------------------------------------------------------------------------
 
-    //  --> constructor injection yontemi  --> daha guvenli, daha anlasilir, test etmesi daha kolaydir
-//    private Repository repo;
-//    @Autowired
-//    public SmsService(@Qualifier("fileRepository") Repository repo) {
-//        this.repo = repo;
-//    }
+    //constructor injection:daha güvenli,daha anlaşılır,test etmesi daha kolay
+/*    private final Repository repo;
+
+    @Autowired
+    public SmsService(@Qualifier("fileRepository") Repository repo) {
+        this.repo = repo;
+    }*/
 
     @Override
     public void sendMessage(Message message) {
-        System.out.println("Mesajiniz sms ile gonderiliyor... Mesaj: "+message.getBody());
+        System.out.println("Mesajınız sms ile gönderiliyor...Mesaj : "+message.getBody());
     }
 
     @Override
     public void saveMessage(Message message) {
         repo.save(message);
+
     }
 }
